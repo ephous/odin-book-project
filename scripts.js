@@ -38,7 +38,7 @@ function printBooksInLibraryToConsole(){
   myLibrary.forEach( x => console.log( x.info() ));
 }
 
-function displayBooksInLibrary(){
+function displayBooksInLibrarySimpleText(){
   const library_container = document.querySelector('#library-container');
   myLibrary.forEach( x => {
     const div = document.createElement("div");
@@ -48,6 +48,30 @@ function displayBooksInLibrary(){
   });
 }
 
+function createBookCard( book ){
+    const card = document.createElement("div");
+    card.className = 'book-card';
+
+    //card.textContent = book.info();
+    let arr = ['title','author','pages','read']
+    arr.forEach( x => {
+      let line = document.createElement("div");
+      line.textContent = x.toUpperCase() + ': ' + book[x];
+      //console.log(x, book[x]);
+      card.appendChild(line);
+    })
+
+    return card;
+}
+
+function displayBooksInLibraryCards(){
+    const library_container = document.querySelector('#library-container');
+    myLibrary.forEach( x => {
+      library_container.appendChild( createBookCard(x) );
+    });
+}
+
 // unit test
 printBooksInLibraryToConsole()
-displayBooksInLibrary()
+//displayBooksInLibrarySimpleText()
+displayBooksInLibraryCards()
