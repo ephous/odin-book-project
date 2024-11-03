@@ -34,9 +34,20 @@ addBookToLibrary('The Scarlet Letter', 'Nathaniel Hawthorne', 272, true);
 addBookToLibrary('Nineteen Eighty-Four', 'George Orwell', 328, false);
 addBookToLibrary('Animal Farm', 'George Orwell', 176, true);
 
-function displayBooksInLibrary(){
+function printBooksInLibraryToConsole(){
   myLibrary.forEach( x => console.log( x.info() ));
 }
 
+function displayBooksInLibrary(){
+  const library_container = document.querySelector('#library-container');
+  myLibrary.forEach( x => {
+    const div = document.createElement("div");
+    div.textContent = x.info();
+    div.style.color = "blue";
+    library_container.appendChild(div);
+  });
+}
+
 // unit test
+printBooksInLibraryToConsole()
 displayBooksInLibrary()
