@@ -144,10 +144,25 @@ showButton.addEventListener("click", () => {
   dialog.showModal();
 });
 
+function resetFormFields(){
+  
+  const title = document.getElementById("book-title");
+  const author = document.getElementById("book-author");
+  const pages = document.getElementById("book-pages");
+  const status = document.getElementById("book-read-status");
+  
+  title.value='';
+  author.value='';
+  pages.value=1;
+  status.checked = false;
+   
+}
+
 
 // "Cancel" button closes the dialog without submitting because of [formmethod="dialog"], 
 // triggering a close event.
 dialog.addEventListener("close", (e) => {
+  resetFormFields();
   dialog.close(); // not needed in this example
 });
 
