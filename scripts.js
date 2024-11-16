@@ -73,26 +73,15 @@ function displayBooksInLibraryCards(){
 
 //===========================================
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog
-// const dialog = document.querySelector("dialog");
-// const showButton = document.querySelector("dialog + button");
-// const closeButton = document.querySelector("dialog button");
 const newbookForm = document.querySelector("#new-book-form");
 const dialog = document.querySelector("#new-book-dialog");
 const showButton = document.querySelector("#show-dialog");
-//const confirmButton = dialog.querySelector("#confirm-button");
-//const submitButton = dialog.querySelector("#submit-button");
 
 // "Show the dialog" button opens the dialog modally
 showButton.addEventListener("click", () => {
   dialog.showModal();
 });
 
-/*
-// "Close" button closes the dialog
-closeButton.addEventListener("click", () => {
-  dialog.close();
-});
-*/
 
 // "Cancel" button closes the dialog without submitting because of [formmethod="dialog"], 
 // triggering a close event.
@@ -101,13 +90,6 @@ dialog.addEventListener("close", (e) => {
   dialog.close(); // not needed in this example
 });
 
-/*
-// Prevent the "confirm" button from the default behavior of submitting the form, and close the dialog with the `close()` method, which triggers the "close" event.
-confirmButton.addEventListener("click", (event) => {
-  event.preventDefault(); // We don't want to submit this fake form
-  dialog.close(selectEl.value); // Have to send the select box value here.
-});
-*/
 
 // https://www.freecodecamp.org/news/how-to-submit-a-form-with-javascript/
 newbookForm.addEventListener("submit", (event) => {
