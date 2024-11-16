@@ -157,6 +157,12 @@ newbookForm.addEventListener("submit", (event) => {
   
   event.preventDefault(); // We don't want to submit this fake form
   
+  //TODO: is this the correct way to do this?
+  if (event.submitter.value=='cancel'){
+    dialog.close();
+    return;
+  }
+
   let title = document.getElementById("book-title").value;
   let author = document.getElementById("book-author").value;
   let pages = document.getElementById("book-pages").value;
