@@ -8,6 +8,43 @@
     </head>
     <body>
         <div id="library-container"></div>
+        <div id="form-container">
+            <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog -->
+            <!--
+            <dialog open>
+                <p>Greetings, one and all!</p>
+                <form method="dialog">
+                  <button>OK</button>
+                </form>
+              </dialog>
+              -->
+              <!-- <dialog>
+                <p>This modal dialog has a groovy backdrop!</p>
+                <button autofocus>Close</button>
+              </dialog>
+              <button>Show the dialog</button>
+              -->
+              <dialog id="new-book-dialog">
+                <form id="new-book-form" action="#" method="get">
+                    <p>
+                        <label for="book-title">Title:</label>
+                        <input type="text" id="book-title" name="book-title"><br>
+                        <label for="book-author">Author:</label>
+                        <input type="text" id="book-author" name="book-author"><br>
+                        <label for="book-pages">Page Count:</label>
+                        <input type="number" id="book-pages" min="1" value="1" name="book-pages"><br>
+                        <label for="book-read-status">Read:</label>
+                        <input type="checkbox" id="book-read-status" name="book-read-status"><br>
+                    </p>
+                    <div>
+                        <button value="cancel" formmethod="dialog">Cancel</button>
+                        <!-- <button id="confirm-button" value="default">Confirm</button> -->
+                        <button id="submit-button" type="submit">Submit</button>
+                    </div>
+                </form>
+              </dialog>
+              <button id="show-dialog">Add New Book</button>
+        </div>
     </body>
     <script src="./scripts.js" type="text/javascript"></script>
 </html>
