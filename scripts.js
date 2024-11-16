@@ -7,6 +7,7 @@ function Book(title, author, pages, read = false) {
   this.author = author,
   this.pages = pages,
   this.read =  read
+  this.uuid = self.crypto.randomUUID(); // https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID
 
   this.info = function(){
     let status = this.read ? "this book has been read" : "this book has not been read yet"
@@ -51,7 +52,7 @@ function displayBooksInLibrarySimpleText(){
 function createBookCard( book ){
     const card = document.createElement("div");
     card.className = 'book-card';
-
+    
     //card.textContent = book.info();
     let arr = ['title','author','pages','read']
     arr.forEach( x => {
@@ -60,8 +61,34 @@ function createBookCard( book ){
       //console.log(x, book[x]);
       card.appendChild(line);
     })
-
+    
+    
+    // add button to remove book
+    let button = document.createElement("button");
+    button.className = 'book-remove';
+    button.textContent = "Remove Book";
+    button.setAttribute("data-book-uuid", book.uuid );
+    card.appendChild(button);
+    button.addEventListener("click", (e) => {
+      removeBook(e.target) });
+    
     return card;
+}
+
+function removeBook(removeButton){
+  const uuid = removeButton.getAttribute("data-book-uuid");
+  const index = myLibrary.findIndex( x => x.uuid==uuid);
+  if (index > -1) {
+    // second param means remove one item only
+    myLibrary.splice(index, 1);
+    
+    // and then remove the card...
+    const library_container = document.querySelector('#library-container');
+    library_container.removeChild(removeButton.parentNode);
+    
+    printBooksInLibraryToConsole();
+    
+  }
 }
 
 function displayBooksInLibraryCards(){
@@ -93,19 +120,21 @@ dialog.addEventListener("close", (e) => {
 
 // https://www.freecodecamp.org/news/how-to-submit-a-form-with-javascript/
 newbookForm.addEventListener("submit", (event) => {
+  
   event.preventDefault(); // We don't want to submit this fake form
+  
   let title = document.getElementById("book-title").value;
   let author = document.getElementById("book-author").value;
   let pages = document.getElementById("book-pages").value;
   let status = document.getElementById("book-read-status").checked;
-  
   const newbook = new Book(title, author, pages, status);
+  myLibrary.push(newbook);
+  
   document.querySelector('#library-container').appendChild( createBookCard(newbook) );
   
   dialog.close();
 
-  // not really needed here b/c no backend...
-  addBookToLibrary(title, author, pages, status);
+  //addBookToLibrary(title, author, pages, status);
   printBooksInLibraryToConsole();
 
 });
