@@ -32,6 +32,23 @@ body {
   color: red;
 }
 
+#new-book-form-field-container {
+  display:flex;
+  /* flex-direction: column; */
+  /* justify-content: flex-start; */
+}
+
+#new-book-form-field-container > div {
+  display: flex;
+  flex-direction: column;  
+}
+
+.new-book-form-field > label {  
+  font-weight: 700;
+  color: black;
+}
+
+
 /* https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog */
 /* ::backdrop {
     background-image: linear-gradient(
