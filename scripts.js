@@ -14,6 +14,10 @@ function Book(title, author, pages, read = false) {
     return `"${this.title}" by ${this.author}, ${this.pages} pages, ${status}`;
   }
 
+  this.toggleStatus = function(){
+    this.read = !this.read;
+  }
+
 }
 
 // using rest operator for signature of addBookTOLibrary
@@ -36,7 +40,6 @@ addBookToLibrary('Nineteen Eighty-Four', 'George Orwell', 328, false);
 addBookToLibrary('Animal Farm', 'George Orwell', 176, true);
 
 function printBooksInLibraryToConsole(){
-  myLibrary.forEach( x => console.log( x.info() ));
 }
 
 function displayBooksInLibrarySimpleText(){
@@ -57,26 +60,58 @@ function createBookCard( book ){
     let arr = ['title','author','pages','read']
     arr.forEach( x => {
       let line = document.createElement("div");
+      line.className = x;
       line.textContent = x.toUpperCase() + ': ' + book[x];
-      //console.log(x, book[x]);
       card.appendChild(line);
     })
+
+    // add button to toggle status
+    let statusButton = document.createElement("button");
+    statusButton.className = 'book-remove';
+    statusButton.textContent = book.read ? "Mark as Unread" : "Mark as Read";
+    statusButton.setAttribute("data-book-uuid", book.uuid );
+    card.appendChild(statusButton);
+    statusButton.addEventListener("click", (e) => {
+      toggleBookStatus(e.target) });
     
-    
+
     // add button to remove book
-    let button = document.createElement("button");
-    button.className = 'book-remove';
-    button.textContent = "Remove Book";
-    button.setAttribute("data-book-uuid", book.uuid );
-    card.appendChild(button);
-    button.addEventListener("click", (e) => {
+    let removeButton = document.createElement("button");
+    removeButton.className = 'book-remove';
+    removeButton.textContent = "Remove Book";
+    removeButton.setAttribute("data-book-uuid", book.uuid );
+    card.appendChild(removeButton);
+    removeButton.addEventListener("click", (e) => {
       removeBook(e.target) });
     
     return card;
 }
 
-function removeBook(removeButton){
-  const uuid = removeButton.getAttribute("data-book-uuid");
+function refreshBookCard( card, book ){
+    let arr = ['title','author','pages','read']
+    arr.forEach( x => {
+      let line = (card.getElementsByClassName(x))[0]; // because getElementsByClassName returns HTMLCollection
+      line.textContent = x.toUpperCase() + ': ' + book[x];
+      
+      if (x.toLowerCase()=='read'){
+        let statusButton = card.getElementsByClassName('book-remove')[0]; 
+        statusButton.textContent = book.read ? "Mark as Unread" : "Mark as Read";
+      }
+
+    })
+}
+
+function toggleBookStatus(button){
+    const uuid = button.getAttribute("data-book-uuid");
+    const index = myLibrary.findIndex( x => x.uuid==uuid);
+    if (index > -1) {
+      myLibrary[index].toggleStatus();
+      refreshBookCard(button.parentNode, myLibrary[index]);
+    }
+}
+
+function removeBook(button){
+  const uuid = button.getAttribute("data-book-uuid");
   const index = myLibrary.findIndex( x => x.uuid==uuid);
   if (index > -1) {
     // second param means remove one item only
@@ -84,7 +119,7 @@ function removeBook(removeButton){
     
     // and then remove the card...
     const library_container = document.querySelector('#library-container');
-    library_container.removeChild(removeButton.parentNode);
+    library_container.removeChild(button.parentNode);
     
     printBooksInLibraryToConsole();
     
@@ -113,7 +148,6 @@ showButton.addEventListener("click", () => {
 // "Cancel" button closes the dialog without submitting because of [formmethod="dialog"], 
 // triggering a close event.
 dialog.addEventListener("close", (e) => {
-  console.log("User closed dialog...");
   dialog.close(); // not needed in this example
 });
 
