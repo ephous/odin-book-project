@@ -199,5 +199,5 @@ newbookForm.addEventListener("submit", (event) => {
 //===========================================
 // unit test
 printBooksInLibraryToConsole()
-//displayBooksInLibrarySimpleText()
-displayBooksInLibraryCards()
+displayBooksInLibrarySimpleText()
+//displayBooksInLibraryCards()
