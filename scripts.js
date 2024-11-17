@@ -44,16 +44,33 @@ function printBooksInLibraryToConsole(){
 
 function createBookEntry( book ){
     const div = document.createElement("div");
+    div.className = 'book-entry';
     div.textContent = book.info();
     div.style.color = "blue";
     return div;
 }
 
 function displayBooksInLibrarySimpleText(){
+  // adding a div to library container (where the child div will contain the entries)
+  // so that flex in CSS will not be applied to the entries...
   const library_container = document.querySelector('#library-container');
+  const div = document.createElement("div");  
+  library_container.appendChild(div);   
   myLibrary.forEach( x => {
-    library_container.appendChild( createBookEntry(x) );
+    div.appendChild( createBookEntry(x) );
   });
+}
+
+function trashCanSvg(){
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>'
+}
+
+function bookReadSvg(){
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' 
+}
+
+function bookUnreadSvg(){
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>'
 }
 
 function createBookCard( book ){
@@ -61,30 +78,41 @@ function createBookCard( book ){
     card.className = 'book-card';
     
     //card.textContent = book.info();
-    let arr = ['title','author','pages','read']
+    let arr = ['title','author','pages']; //,'read']
     arr.forEach( x => {
       let line = document.createElement("div");
       line.className = x;
-      line.textContent = x.toUpperCase() + ': ' + book[x];
+      //line.textContent = x.toUpperCase() + ': ' + book[x];
+      if(x=='pages'){
+        line.textContent = ` ${book[x]} pages`;
+      } else {
+        line.textContent = book[x];
+      }
       card.appendChild(line);
     })
 
+    // button base
+    let buttonBase = document.createElement("div");
+    buttonBase.className = 'book-card-button-base';
+    card.appendChild(buttonBase);
+
     // add button to toggle status
     let statusButton = document.createElement("button");
-    statusButton.className = 'book-remove';
-    statusButton.textContent = book.read ? "Mark as Unread" : "Mark as Read";
+    statusButton.className = 'book-card-read-button';
+    //statusButton.textContent = book.read ? "Mark as Unread" : "Mark as Read";
+    statusButton.innerHTML = book.read ? bookUnreadSvg() : bookReadSvg();
     statusButton.setAttribute("data-book-uuid", book.uuid );
-    card.appendChild(statusButton);
+    buttonBase.appendChild(statusButton);
     statusButton.addEventListener("click", (e) => {
       toggleBookStatus(e.target) });
     
 
     // add button to remove book
     let removeButton = document.createElement("button");
-    removeButton.className = 'book-remove';
-    removeButton.textContent = "Remove Book";
+    removeButton.className = 'book-card-delete-button';
+    removeButton.innerHTML = trashCanSvg(); //"Remove Book";
     removeButton.setAttribute("data-book-uuid", book.uuid );
-    card.appendChild(removeButton);
+    buttonBase.appendChild(removeButton);
     removeButton.addEventListener("click", (e) => {
       removeBook(e.target) });
     
@@ -92,15 +120,21 @@ function createBookCard( book ){
 }
 
 function refreshBookCard( card, book ){
-    let arr = ['title','author','pages','read']
+    let arr = ['title','author','pages']; //,'read']
     arr.forEach( x => {
       let line = (card.getElementsByClassName(x))[0]; // because getElementsByClassName returns HTMLCollection
-      line.textContent = x.toUpperCase() + ': ' + book[x];
-      
-      if (x.toLowerCase()=='read'){
-        let statusButton = card.getElementsByClassName('book-remove')[0]; 
-        statusButton.textContent = book.read ? "Mark as Unread" : "Mark as Read";
+      //line.textContent = x.toUpperCase() + ': ' + book[x];
+      if(x=='pages'){
+        line.textContent = ` ${book[x]} pages`;
+      } else {
+        line.textContent = book[x];
       }
+      
+      if (x=='read'){
+        let statusButton = card.getElementsByClassName('book-card-read-button')[0]; 
+        //statusButton.textContent = book.read ? "Mark as Unread" : "Mark as Read";
+        statusButton.innerHTML = book.read ? bookUnreadSvg() : bookReadSvg();
+    }
 
     })
 }
@@ -110,7 +144,8 @@ function toggleBookStatus(button){
     const index = myLibrary.findIndex( x => x.uuid==uuid);
     if (index > -1) {
       myLibrary[index].toggleStatus();
-      refreshBookCard(button.parentNode, myLibrary[index]);
+      const buttonBase = button.parentNode;
+      refreshBookCard(buttonBase.parentNode, myLibrary[index]);
     }
 }
 
@@ -123,7 +158,8 @@ function removeBook(button){
     
     // and then remove the card...
     const library_container = document.querySelector('#library-container');
-    library_container.removeChild(button.parentNode);
+    const buttonBase = button.parentNode;
+    library_container.removeChild(buttonBase.parentNode);
     
     printBooksInLibraryToConsole();
     
@@ -226,7 +262,7 @@ toggleDisplay.addEventListener("click", (event)=>{
 // unit test
 printBooksInLibraryToConsole()
 
-var DISPLAY=0;
+var DISPLAY=1;
 if (DISPLAY){
   displayBooksInLibraryCards();
 } else {
