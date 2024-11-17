@@ -193,11 +193,35 @@ newbookForm.addEventListener("submit", (event) => {
   printBooksInLibraryToConsole();
 
 });
-  
 
+//==========================================
+const toggleDisplay = document.querySelector("#toggle-display");
+toggleDisplay.addEventListener("click", (event)=>{
+  
+  // https://www.geeksforgeeks.org/remove-all-the-child-elements-of-a-dom-node-in-javascript/
+  const container = document.querySelector("#library-container");
+  let child = container.lastElementChild;
+  while (child) {
+    container.removeChild(child);
+    child = container.lastElementChild;
+  }
+
+  if (DISPLAY){
+    DISPLAY=0;
+    displayBooksInLibrarySimpleText();
+  } else {
+    DISPLAY=1;
+    displayBooksInLibraryCards();    
+  }
+})
 
 //===========================================
 // unit test
 printBooksInLibraryToConsole()
-displayBooksInLibrarySimpleText()
-//displayBooksInLibraryCards()
+
+var DISPLAY=1;
+if (DISPLAY){
+  displayBooksInLibraryCards();
+} else {
+  displayBooksInLibrarySimpleText();
+}
