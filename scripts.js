@@ -42,13 +42,17 @@ addBookToLibrary('Animal Farm', 'George Orwell', 176, true);
 function printBooksInLibraryToConsole(){
 }
 
+function createBookEntry( book ){
+    const div = document.createElement("div");
+    div.textContent = book.info();
+    div.style.color = "blue";
+    return div;
+}
+
 function displayBooksInLibrarySimpleText(){
   const library_container = document.querySelector('#library-container');
   myLibrary.forEach( x => {
-    const div = document.createElement("div");
-    div.textContent = x.info();
-    div.style.color = "blue";
-    library_container.appendChild(div);
+    library_container.appendChild( createBookEntry(x) );
   });
 }
 
@@ -185,8 +189,11 @@ newbookForm.addEventListener("submit", (event) => {
   const newbook = new Book(title, author, pages, status);
   myLibrary.push(newbook);
   
-  document.querySelector('#library-container').appendChild( createBookCard(newbook) );
-  
+  if (DISPLAY){
+    document.querySelector('#library-container').appendChild( createBookCard(newbook) );
+  } else {
+    document.querySelector('#library-container').appendChild( createBookEntry(newbook) );
+  }
   dialog.close();
 
   //addBookToLibrary(title, author, pages, status);
@@ -219,7 +226,7 @@ toggleDisplay.addEventListener("click", (event)=>{
 // unit test
 printBooksInLibraryToConsole()
 
-var DISPLAY=1;
+var DISPLAY=0;
 if (DISPLAY){
   displayBooksInLibraryCards();
 } else {
