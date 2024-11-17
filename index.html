@@ -9,6 +9,8 @@
     <body>
         <div id="button-container">
             <button class="header-button" id="show-dialog">Add New Book</button>
+            <button class="header-button" id="mark-all-read">Mark All as Read</button>
+            <button class="header-button" id="mark-all-unread">Mark All as Unread</button>
             <button class="header-button" id="toggle-display">Toggle Display</button>
         </div>
         <div id="library-container"></div>
@@ -19,30 +21,30 @@
                     <div id="new-book-form-field-container">
                         <div>
                             <div class="new-book-form-field">
-                                <label for="book-title">Title:</label>
+                                <label for="new-book-title">Title:</label>
                             </div>
                             <div class="new-book-form-field">
-                                <label for="book-author">Author:</label>
+                                <label for="new-book-author">Author:</label>
                             </div>
                             <div class="new-book-form-field">
-                                <label for="book-pages">Page Count:</label>
+                                <label for="new-book-pages">Page Count:</label>
                             </div>
                             <div class="new-book-form-field">
-                                <label for="book-read-status">Read:</label>
+                                <label for="new-book-read-status">Read:</label>
                             </div>
                         </div>
                         <div>
                             <div class="new-book-form-input">
-                                <input type="text" id="book-title" name="book-title"><br>
+                                <input type="text" id="new-book-title" name="book-title"><br>
                             </div>
                             <div class="new-book-form-input">
-                                <input type="text" id="book-author" name="book-author"><br>
+                                <input type="text" id="new-book-author" name="book-author"><br>
                             </div>
                             <div class="new-book-form-input">
-                                <input type="number" id="book-pages" min="1" value="1" name="book-pages"><br>
+                                <input type="number" id="new-book-pages" min="1" value="1" name="book-pages"><br>
                             </div>
                             <div class="new-book-form-element">
-                                <input type="checkbox" id="book-read-status" name="book-read-status"><br>
+                                <input type="checkbox" id="new-book-read-status" name="book-read-status"><br>
                             </div>
                         </div>
                     </div>

@@ -28,16 +28,18 @@ function addBookToLibrary(...args) {
 }
 
 // initialize library with some books
-addBookToLibrary('The Hobbit', 'J.R.R Tolkien', 295, false);
-addBookToLibrary('The Red Badge of Courage', 'Stephen Crane', 88, true);
-addBookToLibrary('To Kill a Mockingbird', 'Harper Lee', 336, true);
-addBookToLibrary('Brave New World', 'Aldous Huxley', 288, true);
-addBookToLibrary('Flowers for Algernon', 'Daniel Keyes', 274, true);
-addBookToLibrary('The Grapes of Wrath', 'John Steinbeck', 464, true);
-addBookToLibrary('Fahrenheit 451', 'Ray Bradbury', 256, true);
-addBookToLibrary('The Scarlet Letter', 'Nathaniel Hawthorne', 272, true);
-addBookToLibrary('Nineteen Eighty-Four', 'George Orwell', 328, false);
-addBookToLibrary('Animal Farm', 'George Orwell', 176, true);
+function initializeLibrary(){
+  addBookToLibrary('The Hobbit', 'J.R.R Tolkien', 295, false);
+  addBookToLibrary('The Red Badge of Courage', 'Stephen Crane', 88, true);
+  addBookToLibrary('To Kill a Mockingbird', 'Harper Lee', 336, true);
+  addBookToLibrary('Brave New World', 'Aldous Huxley', 288, true);
+  addBookToLibrary('Flowers for Algernon', 'Daniel Keyes', 274, true);
+  addBookToLibrary('The Grapes of Wrath', 'John Steinbeck', 464, false);
+  addBookToLibrary('Fahrenheit 451', 'Ray Bradbury', 256, true);
+  addBookToLibrary('The Scarlet Letter', 'Nathaniel Hawthorne', 272, true);
+  addBookToLibrary('Nineteen Eighty-Four', 'George Orwell', 328, false);
+  addBookToLibrary('Animal Farm', 'George Orwell', 176, true);
+}
 
 function printBooksInLibraryToConsole(){
 }
@@ -61,6 +63,7 @@ function displayBooksInLibrarySimpleText(){
   });
 }
 
+// https://codepen.io/Nice2MeatU/pen/dqmypX
 function trashCanSvg(){
   return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>'
 }
@@ -69,7 +72,7 @@ function bookReadSvg(){
   return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' 
 }
 
-function bookUnreadSvg(){
+function bookNotReadSvg(){
   return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>'
 }
 
@@ -98,9 +101,10 @@ function createBookCard( book ){
 
     // add button to toggle status
     let statusButton = document.createElement("button");
-    statusButton.className = 'book-card-read-button';
+    statusButton.className = 'book-card-button read-button';
     //statusButton.textContent = book.read ? "Mark as Unread" : "Mark as Read";
-    statusButton.innerHTML = book.read ? bookUnreadSvg() : bookReadSvg();
+    statusButton.innerHTML = book.read ? bookReadSvg() : bookNotReadSvg();
+    statusButton.title = book.read ? 'Mark book as "not read"' : 'Mark book as "read"';
     statusButton.setAttribute("data-book-uuid", book.uuid );
     buttonBase.appendChild(statusButton);
     statusButton.addEventListener("click", (e) => {
@@ -109,8 +113,9 @@ function createBookCard( book ){
 
     // add button to remove book
     let removeButton = document.createElement("button");
-    removeButton.className = 'book-card-delete-button';
+    removeButton.className = 'book-card-button delete-button';
     removeButton.innerHTML = trashCanSvg(); //"Remove Book";
+    removeButton.title = 'Remove Book';
     removeButton.setAttribute("data-book-uuid", book.uuid );
     buttonBase.appendChild(removeButton);
     removeButton.addEventListener("click", (e) => {
@@ -129,14 +134,12 @@ function refreshBookCard( card, book ){
       } else {
         line.textContent = book[x];
       }
-      
-      if (x=='read'){
-        let statusButton = card.getElementsByClassName('book-card-read-button')[0]; 
-        //statusButton.textContent = book.read ? "Mark as Unread" : "Mark as Read";
-        statusButton.innerHTML = book.read ? bookUnreadSvg() : bookReadSvg();
-    }
-
     })
+
+    let statusButton = card.getElementsByClassName('book-card-button read-button')[0]; 
+    statusButton.innerHTML = book.read ? bookReadSvg() : bookNotReadSvg();
+    statusButton.title = book.read ? 'Mark book as "not read"' : 'Mark book as "read"';
+
 }
 
 function toggleBookStatus(button){
@@ -186,10 +189,10 @@ showButton.addEventListener("click", () => {
 
 function resetFormFields(){
   
-  const title = document.getElementById("book-title");
-  const author = document.getElementById("book-author");
-  const pages = document.getElementById("book-pages");
-  const status = document.getElementById("book-read-status");
+  const title = document.getElementById("new-book-title");
+  const author = document.getElementById("new-book-author");
+  const pages = document.getElementById("new-book-pages");
+  const status = document.getElementById("new-book-read-status");
   
   title.value='';
   author.value='';
@@ -218,17 +221,18 @@ newbookForm.addEventListener("submit", (event) => {
     return;
   }
 
-  let title = document.getElementById("book-title").value;
-  let author = document.getElementById("book-author").value;
-  let pages = document.getElementById("book-pages").value;
-  let status = document.getElementById("book-read-status").checked;
+  let title = document.getElementById("new-book-title").value;
+  let author = document.getElementById("new-book-author").value;
+  let pages = document.getElementById("new-book-pages").value;
+  let status = document.getElementById("new-book-read-status").checked;
   const newbook = new Book(title, author, pages, status);
   myLibrary.push(newbook);
   
   if (DISPLAY){
     document.querySelector('#library-container').appendChild( createBookCard(newbook) );
   } else {
-    document.querySelector('#library-container').appendChild( createBookEntry(newbook) );
+    // remember that library-container has a child div that the lines of text are added to
+    document.querySelector('#library-container').children[0].appendChild( createBookEntry(newbook) );
   }
   dialog.close();
 
@@ -236,6 +240,56 @@ newbookForm.addEventListener("submit", (event) => {
   printBooksInLibraryToConsole();
 
 });
+
+//==========================================
+document.querySelector("#mark-all-read").addEventListener("click", (event)=>{
+  
+  // [1] mark all library elements as true (no need to match cards w/ entires here)
+  myLibrary.forEach( x => x.read = true);
+
+  // [2] update all cards to point to "checked" svg
+  const container = document.querySelector("#library-container");
+  if (DISPLAY){
+    Array.from(container.children).forEach(card => {
+      let statusButton = card.getElementsByClassName('book-card-button read-button')[0]; 
+      statusButton.innerHTML = bookReadSvg();
+      statusButton.title = 'Mark book as "not read"';
+    })
+  } else {
+    let child = container.lastElementChild;
+    while (child) {
+      container.removeChild(child);
+      child = container.lastElementChild;
+    }
+    displayBooksInLibrarySimpleText();    
+  }
+
+})
+
+document.querySelector("#mark-all-unread").addEventListener("click", (event)=>{
+  
+  // [1] mark all library elements as true (no need to match cards w/ entires here)
+  myLibrary.forEach( x => x.read = false);
+
+  // [2] update all cards to point to "checked" svg
+  const container = document.querySelector("#library-container");
+  if (DISPLAY){
+    Array.from(container.children).forEach(card => {
+      let statusButton = card.getElementsByClassName('book-card-button read-button')[0]; 
+      statusButton.innerHTML = bookNotReadSvg();
+      statusButton.title = 'Mark book as "read"';
+    })
+  } else {
+    let child = container.lastElementChild;
+    while (child) {
+      container.removeChild(child);
+      child = container.lastElementChild;
+    }
+    displayBooksInLibrarySimpleText();
+  }
+
+})
+
 
 //==========================================
 const toggleDisplay = document.querySelector("#toggle-display");
@@ -260,6 +314,7 @@ toggleDisplay.addEventListener("click", (event)=>{
 
 //===========================================
 // unit test
+initializeLibrary()
 printBooksInLibraryToConsole()
 
 var DISPLAY=1;

@@ -54,6 +54,12 @@ button {
   gap: 8px;
 }
 
+.book-card-button {
+  color: black;
+  background: none;
+  border: none;
+}
+
 .title {
   font-style: italic;
 }
@@ -111,3 +117,35 @@ button {
     background-color: slategray;
     opacity: 0.5;
   }
+
+  
+  /* =========================================== */
+
+  /* https://stackoverflow.com/questions/29814709/click-event-not-fired-on-button-with-svg-element-in-safari */
+  svg {
+    pointer-events: none;
+  }
+
+  /* https://codepen.io/Nice2MeatU/pen/dqmypX */
+  .svg-not-in-use-right-now {
+
+    /* Place the icon on the text baseline. */
+    position: relative;
+    top: .125em;
+
+    /* Prevent the icon from shrinking inside a flex container. */
+    flex-shrink: 0;
+
+    /* Scale the icon to match the font-size of the parent element. */
+    height: 1em;
+    width: 1em;
+
+    /* Let the icon take whatever color the parent has. */
+    fill: currentColor;
+
+    /*
+     * If the icon is used on a link, which has a color transition,
+     * we can also use a transition on the fill value.
+    */
+   transition: fill .3s;
+   }
