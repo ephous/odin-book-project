@@ -21,13 +21,17 @@ body {
   /* background-color: black; */
 }
 
+#button-container {
+  margin-bottom: 24px;
+}
+
 button {
   border-radius: 4px;
   background-color: cornflowerblue;
   font-size: 1.2rem;
   font-weight: 400;
   color: white;
-  padding: 0.2rem;
+  padding: 0.4rem;
 }
 
 #library-container {
