@@ -26,7 +26,7 @@ body {
 }
 
 button {
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: cornflowerblue;
   font-size: 1.2rem;
   font-weight: 400;
@@ -71,6 +71,7 @@ button {
 /* https://stackoverflow.com/questions/73925255 */
 /* https://css-tricks.com/how-to-implement-and-style-the-dialog-element/ */
 #new-book-dialog {
+  min-width: 800px;
   margin: 0; /* `margin: auto;` is the default. */
   transform: translateX(-50%);
   left: 50%;
@@ -80,7 +81,6 @@ button {
   border-radius: calc(5px * var(--ratio));
   box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   padding: 1.6rem;
-  max-width: 800px;
   
 }
 
@@ -98,13 +98,19 @@ button {
 }
 
 .new-book-form-field > label,
-.new-book-form-input > label {  
+.new-book-form-input > input {  
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
+  min-width: 800px;
+
   color: black;
 }
 
+#new-book-read-status {
+  height: 24px;
+  width: 24px;
+}
 
 /* https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog */
 /* ::backdrop {
